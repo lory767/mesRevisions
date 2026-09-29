@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Grand Manuel Intégral du DEAS — Version Exhaustive 2026</title>
+<style>
+:root{--primary:#0f766e;--primary-dark:#115e59;--accent:#b45309;--bg:#f1f5f9;--text:#0f172a;--border:#cbd5e1}
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif}
+body{background:var(--bg);color:var(--text);padding-bottom:60px}
+header{background:linear-gradient(135deg,#0f766e,#0284c7);color:#fff;padding:15px 20px;position:sticky;top:0;z-index:100;box-shadow:0 4px 10px rgba(0,0,0,.08)}
+.header-container{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:15px}
+.logo{font-size:1.25rem;font-weight:800}
+.nav-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.nav-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.2);color:#fff;padding:8px 14px;border-radius:20px;font-size:.85rem;font-weight:600;cursor:pointer;transition:all .2s}
+.nav-btn:hover,.nav-btn.active{background:#fff;color:var(--primary)}
+main{max-width:1200px;margin:20px auto;padding:0 15px;display:grid;grid-template-columns:320px 1fr;gap:20px}
+@media(max-width:850px){main{grid-template-columns:1fr}.sidebar{position:static!important}}
+.sidebar{background:#fff;border-radius:12px;border:1px solid var(--border);padding:15px;height:fit-content;position:sticky;top:85px}
+.sidebar h2{font-size:.95rem;text-transform:uppercase;color:#64748b;margin-bottom:12px;letter-spacing:.05em}
+.menu-list{list-style:none;display:flex;flex-direction:column;gap:4px}
+.menu-item{padding:10px 12px;border-radius:8px;font-size:.88rem;font-weight:600;cursor:pointer;color:#475569;border-left:3px solid transparent}
+.menu-item:hover{background:#f8fafc;color:var(--primary)}
+.menu-item.active{background:#f0fdfa;color:var(--primary);border-left-color:var(--primary)}
+.content-area{display:flex;flex-direction:column;gap:15px}
+.tab-content{display:none}.tab-content.active{display:block}
+.dashboard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:15px}
+.stat-card{background:#fff;border-radius:10px;padding:15px;text-align:center;border:1px solid var(--border)}
+.stat-num{font-size:2rem;font-weight:800;color:var(--primary);margin-top:5px}
+.course-card{background:#fff;border-radius:10px;border:1px solid var(--border);border-left:5px solid var(--primary);padding:20px;margin-bottom:15px}
+.course-card h3{color:var(--primary);font-size:1.15rem;margin-bottom:10px;border-bottom:1px solid #f1f5f9;padding-bottom:6px}
+.course-card ul{margin-left:20px;font-size:.95rem;line-height:1.5;color:#334155}
+.course-card li{margin-bottom:6px}
+.flashcard-wrapper{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:300px;background:#fff;border-radius:12px;border:1px solid var(--border);padding:20px}
+.flashcard{width:100%;max-width:550px;height:200px;perspective:1000px;cursor:pointer}
+.flashcard-inner{position:relative;width:100%;height:100%;text-align:center;transition:transform .4s;transform-style:preserve-3d}
+.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}
+.flashcard-front,.flashcard-back{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:10px;padding:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid var(--border);overflow:auto}
+.flashcard-front{background:#fff;color:var(--primary)}
+.flashcard-back{background:var(--primary);color:#fff;transform:rotateY(180deg)}
+.fc-controls{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;justify-content:center}
+.quiz-card{background:#fff;border-radius:10px;padding:20px;border:1px solid var(--border);margin-bottom:15px}
+.quiz-question{font-weight:700;margin-bottom:12px}
+.quiz-options{display:flex;flex-direction:column;gap:8px}
+.quiz-option{padding:12px 16px;border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:.9rem;background:#f8fafc}
+.quiz-option:hover{background:#e2e8f0}
+.quiz-option.correct{background:#dcfce7;border-color:#22c55e;color:#15803d;font-weight:700}
+.quiz-option.wrong{background:#ffe4e6;border-color:#f43f5e;color:#9f1239}
+.quiz-explanation{margin-top:12px;padding:10px 14px;background:#f8fafc;border-left:4px solid var(--accent);font-size:.85rem;color:#334155;display:none;line-height:1.4}
+.btn{padding:10px 20px;border-radius:8px;border:none;font-weight:700;cursor:pointer;font-size:.9rem}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-success{background:#059669;color:#fff}
+.btn-outline{background:transparent;border:2px solid var(--primary);color:var(--primary)}
+.chapter-header{background:#e2e8f0;padding:10px 15px;border-radius:6px;font-weight:700;font-size:.9rem;color:#334155}
+</style>
+</head>
+<body>
+<header>
+  <div class="header-container">
+    <div class="logo">🩺 Grand Classeur d'État Interactif — Référentiel AS</div>
+    <nav class="nav-tabs">
+      <button class="nav-btn active" onclick="switchMainTab('tab-cours',this)">📖 Fiches de Cours</button>
+      <button class="nav-btn" onclick="switchMainTab('tab-cartes',this)">🃏 Flashcards</button>
+      <button class="nav-btn" onclick="switchMainTab('tab-qcm',this)">🎯 QCM d'Entraînement</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <aside class="sidebar">
+    <h2>🗂️ Sommaire des modules</h2>
+    <ul class="menu-list" id="chapter-menu"></ul>
+  </aside>
+  <div class="content-area">
+    <div id="active-chapter-title" class="chapter-header">Chargement du classeur...</div>
+    <section id="tab-cours" class="tab-content active"><div id="cours-container"></div></section>
+    <section id="tab-cartes" class="tab-content">
+      <div class="dashboard-grid"><div class="stat-card"><div>Cartes validées</div><div class="stat-num" id="stat-fc">0 / 0</div></div></div>
+      <div class="flashcard-wrapper">
+        <div class="flashcard" id="fc-card" onclick="flipCard()">
+          <div class="flashcard-inner">
+            <div class="flashcard-front"><span style="font-size:.75rem;color:#64748b;font-weight:700">QUESTION</span><h3 id="txt-question" style="margin-top:15px;font-size:1.1rem">...</h3></div>
+            <div class="flashcard-back"><span style="font-size:.75rem;color:#cbd5e1;font-weight:700">RÉPONSE CLINIQUE</span><p id="txt-answer" style="margin-top:15px;line-height:1.4">...</p></div>
+          </div>
+        </div>
+        <div class="fc-controls">
+          <button class="btn btn-outline" onclick="prevCard()">Précédent</button>
+          <button class="btn btn-success" onclick="validateCard()">Maîtrisé ! ✅</button>
+          <button class="btn btn-primary" onclick="nextCard()">Suivant</button>
+        </div>
+      </div>
+    </section>
+    <section id="tab-qcm" class="tab-content">
+      <div class="dashboard-grid">
+        <div class="stat-card"><div>Questions répondues</div><div class="stat-num" id="stat-qcm-progress">0 / 0</div></div>
+        <div class="stat-card"><div>Note de session</div><div class="stat-num" id="stat-qcm-score">-- / 20</div></div>
+      </div>
+      <div id="qcm-container"></div>
+    </section>
+  </div>
+</main>
+
+<script>
+// Pour ajouter un module : copier le bloc "m1_besoins_hygiene" et adapter son contenu.
+const BASE_DE_DONNEES = {
+  m1_besoins_hygiene: {
+    titre: "Module 1 : Besoins Fondamentaux & Soins d'Hygiène Corporelle",
+    cours: [
+      { t: "1. Le Modèle des 14 Besoins Fondamentaux (Virginia Henderson)", p: [
+        "Outil d'évaluation clinique de l'aide-soignant pour déterminer l'autonomie ou le niveau de dépendance d'une personne âgée ou fragilisée.",
+        "<strong>Les 14 besoins :</strong> 1. Respirer | 2. Boire et manger | 3. Éliminer | 4. Se mouvoir et maintenir une bonne posture | 5. Dormir et se reposer | 6. Se vêtir et se dévêtir | 7. Maintenir la température corporelle | 8. Être propre, soigné et protéger ses téguments | 9. Éviter les dangers | 10. Communiquer | 11. Agir selon ses croyances et valeurs | 12. S'occuper en vue de se réaliser | 13. Se divertir | 14. Apprendre.",
+        "L'aide-soignant doit observer chaque besoin, dépister les dépendances et stimuler les ressources restantes."
+      ] }
+    ],
+    cartes: [
+      { q: "Combien y a-t-il de besoins fondamentaux dans le modèle de Virginia Henderson ?", r: "14 besoins fondamentaux." },
+      { q: "À quoi sert ce modèle pour l'aide-soignant ?", r: "À évaluer l'autonomie ou le niveau de dépendance de la personne." },
+      { q: "Quel est le rôle de l'aide-soignant face à chaque besoin ?", r: "Observer, dépister les dépendances et stimuler les ressources restantes." }
+    ],
+    qcm: [
+      { q: "Combien de besoins fondamentaux compte le modèle de Virginia Henderson ?", o: ["10", "12", "14", "16"], c: 2, e: "Le modèle comporte 14 besoins fondamentaux." },
+      { q: "Lequel de ces éléments fait partie des 14 besoins ?", o: ["Éviter les dangers", "Gérer son budget", "Voyager", "Cuisiner"], c: 0, e: "« Éviter les dangers » est le besoin n° 9." },
+      { q: "Face à un besoin, l'aide-soignant doit notamment :", o: ["Tout faire à la place de la personne", "Stimuler les ressources restantes", "Ignorer les dépendances", "Attendre l'avis du médecin"], c: 1, e: "Il observe, dépiste les dépendances et stimule les ressources restantes." }
+    ]
+  }
+};
+
+let chapId = Object.keys(BASE_DE_DONNEES)[0];
+let fcIdx = 0, fcDone = {}, qcmAnswered = {}, qcmScore = {};
+
+function switchMainTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function buildMenu() {
+  const ul = document.getElementById('chapter-menu');
+  ul.innerHTML = '';
+  Object.keys(BASE_DE_DONNEES).forEach(id => {
+    const li = document.createElement('li');
+    li.className = 'menu-item' + (id === chapId ? ' active' : '');
+    li.textContent = BASE_DE_DONNEES[id].titre;
+    li.onclick = () => { chapId = id; fcIdx = 0; loadChapter(); };
+    ul.appendChild(li);
+  });
+}
+
+function loadChapter() {
+  const ch = BASE_DE_DONNEES[chapId];
+  document.getElementById('active-chapter-title').textContent = ch.titre;
+  buildMenu(); renderCours(); renderCard(); renderQcm();
+}
+
+function renderCours() {
+  const box = document.getElementById('cours-container');
+  box.innerHTML = '';
+  BASE_DE_DONNEES[chapId].cours.forEach(c => {
+    const d = document.createElement('div');
+    d.className = 'course-card';
+    d.innerHTML = '<h3>' + c.t + '</h3><ul>' + c.p.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+    box.appendChild(d);
+  });
+}
+
+function cards() { return BASE_DE_DONNEES[chapId].cartes || []; }
+function renderCard() {
+  const list = cards(), done = fcDone[chapId] || (fcDone[chapId] = {});
+  document.getElementById('fc-card').classList.remove('flipped');
+  document.getElementById('txt-question').textContent = list.length ? list[fcIdx].q : 'Aucune carte pour ce module.';
+  document.getElementById('txt-answer').textContent = list.length ? list[fcIdx].r : '';
+  document.getElementById('stat-fc').textContent = Object.keys(done).length + ' / ' + list.length;
+}
+function flipCard() { document.getElementById('fc-card').classList.toggle('flipped'); }
+function nextCard() { if (cards().length) { fcIdx = (fcIdx + 1) % cards().length; renderCard(); } }
+function prevCard() { if (cards().length) { fcIdx = (fcIdx - 1 + cards().length) % cards().length; renderCard(); } }
+function validateCard() { (fcDone[chapId] = fcDone[chapId] || {})[fcIdx] = true; nextCard(); }
+
+function renderQcm() {
+  const box = document.getElementById('qcm-container'), list = BASE_DE_DONNEES[chapId].qcm || [];
+  qcmAnswered[chapId] = {}; qcmScore[chapId] = 0;
+  box.innerHTML = '';
+  list.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.innerHTML = '<div class="quiz-question">' + (qi + 1) + '. ' + q.q + '</div><div class="quiz-options"></div><div class="quiz-explanation">' + q.e + '</div>';
+    const opts = card.querySelector('.quiz-options');
+    q.o.forEach((txt, oi) => {
+      const o = document.createElement('div');
+      o.className = 'quiz-option';
+      o.textContent = txt;
+      o.onclick = () => answer(card, q, qi, oi);
+      opts.appendChild(o);
+    });
+    box.appendChild(card);
+  });
+  updateQcmStats();
+}
+function answer(card, q, qi, oi) {
+  if (qcmAnswered[chapId][qi]) return;
+  qcmAnswered[chapId][qi] = true;
+  const opts = card.querySelectorAll('.quiz-option');
+  opts[q.c].classList.add('correct');
+  if (oi === q.c) qcmScore[chapId]++; else opts[oi].classList.add('wrong');
+  card.querySelector('.quiz-explanation').style.display = 'block';
+  updateQcmStats();
+}
+function updateQcmStats() {
+  const total = (BASE_DE_DONNEES[chapId].qcm || []).length, n = Object.keys(qcmAnswered[chapId]).length;
+  document.getElementById('stat-qcm-progress').textContent = n + ' / ' + total;
+  document.getElementById('stat-qcm-score').textContent = n ? (qcmScore[chapId] / n * 20).toFixed(1).replace('.0', '') + ' / 20' : '-- / 20';
+}
+
+loadChapter();
+</script>
+</body>
+</html>
